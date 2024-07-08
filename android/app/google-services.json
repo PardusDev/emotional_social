@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "190946429583",
+    "project_id": "emotional-social",
+    "storage_bucket": "emotional-social.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190946429583:android:27deed3666c66b9b9b7efa",
+        "android_client_info": {
+          "package_name": "com.avci.emotional_social"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnOir2Hjzy8OddphESp3vnOlIWhP7rSuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

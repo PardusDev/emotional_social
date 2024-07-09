@@ -1,9 +1,13 @@
 import 'package:emotional_social/blocs/auth/auth_bloc.dart';
+import 'package:emotional_social/screens/post_detail_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../blocs/post/post_bloc.dart';
 import '../models/Post.dart';
+import '../widgets/right_transition.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,11 +18,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _postContentController = TextEditingController();
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
     context.read<PostBloc>().add(LoadPosts());
+    // TODO: Check user is available
   }
 
   @override
@@ -55,9 +61,11 @@ class _HomePageState extends State<HomePage> {
                     final content = _postContentController.text;
                     if (content.isNotEmpty) {
                       final post = Post(
-                      id: DateTime.now().toString(),
-                    content: content,
-                    author: 'User',
+                        id: DateTime.now().toString(),
+                        content: content,
+                        authorId: user!.uid,
+                        author: "test",
+                        sharedDate: DateTime.now()
                       );
                       context.read<PostBloc>().add(AddPost(post));
                       _postContentController.clear();
@@ -77,9 +85,24 @@ class _HomePageState extends State<HomePage> {
                     itemCount: state.posts.length,
                     itemBuilder: (context, index) {
                       final post = state.posts[index];
-                      return ListTile(
-                        title: Text(post.author),
-                        subtitle: Text(post.content),
+                      final dateFormat = DateFormat("yyyy.MM.dd HH:mm");
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(context, PageRouteBuilder(
+                              pageBuilder: (context, animation, secondaryAnimation) => PostDetailPage(), transitionsBuilder: rightTransition )
+                          );
+                        },
+                        child: ListTile(
+                          title: Row(
+                            children: [
+                              Text(post.author), //uid
+                              Text(" - "),
+                              Text(dateFormat.format(DateTime.now()))
+                            ],
+                          ),
+                          subtitle: Text(post.content),
+                        ),
                       );
                     },
                   );

@@ -1,30 +1,56 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+
+import '../models/User.dart';
 
 class AuthRepository {
-  final FirebaseAuth _firebaseAuth;
+  final auth.FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
 
-  AuthRepository({FirebaseAuth? firebaseAuth})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+  AuthRepository({auth.FirebaseAuth? firebaseAuth, FirebaseFirestore? firestore})
+      : _firebaseAuth = firebaseAuth ?? auth.FirebaseAuth.instance,
+        _firestore = firestore ?? FirebaseFirestore.instance;
 
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
+  Future<auth.User?> getCurrentUser() async {
+    return _firebaseAuth.currentUser;
+  }
+
+  Future<auth.User?> signInWithEmailAndPassword(String email, String password) async {
     try {
-      UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      auth.UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       return userCredential.user;
-    } on FirebaseAuthException {
+    } on auth.FirebaseAuthException {
       return null;
     }
   }
 
-  Future<User?> registerWithEmailAndPassword(String email, String password) async {
+  Future<auth.User?> registerWithEmailAndPassword(String email, String password, String name, String surname) async {
     try {
-      UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      auth.UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      if (userCredential.user != null) {
+        User newUser = User(
+          uid: userCredential.user!.uid,
+          email: email,
+          name: name,
+          surname: surname,
+        );
+        await _firestore.collection('users').doc(newUser.uid).set(newUser.toDocument());
+      }
       return userCredential.user;
-    } on FirebaseAuthException {
+    } on auth.FirebaseAuthException {
       return null;
     }
   }
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  Future<User?> getUserByUID(String uid) async {
+    DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
+    if (doc.exists) {
+      return User.fromDocument(doc);
+    }
+    return null;
   }
 }

@@ -8,21 +8,35 @@ class PostRepository {
   PostRepository({FirebaseFirestore? firebaseFirestore}) : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Stream<List<Post>> getPosts() {
-    return _firebaseFirestore.collection('posts').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return Post(
+    return _firebaseFirestore
+        .collection('posts')
+        .orderBy('sharedDate', descending: true)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      List<Post> posts = [];
+      for (var doc in snapshot.docs) {
+        final postData = doc.data() as Map<String, dynamic>;
+        final userDoc = await _firebaseFirestore.collection('users').doc(postData['authorId']).get();
+        final userData = userDoc.data() as Map<String, dynamic>;
+
+        final post = Post(
           id: doc.id,
-          content: doc['content'],
-          author: doc['author']
+          content: postData['content'],
+          authorId: postData["authorId"],
+          author: "${userData["name"]} ${userData["surname"]}",
+          sharedDate: postData["sharedDate"].toDate()
         );
-      }).toList();
+        posts.add(post);
+      }
+      return posts;
     });
   }
 
   Future<void> addPost(Post post) async {
     await _firebaseFirestore.collection('posts').add({
       'content': post.content,
-      'author': post.author
+      'authorId': post.authorId,
+      'sharedDate': DateTime.now()
     });
   }
 }

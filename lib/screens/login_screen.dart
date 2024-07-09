@@ -43,7 +43,9 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   final email = _emailController.text;
                   final password = _passwordController.text;
-                  context.read<AuthBloc>().add(SignUpRequested(email, password));
+                  final name = "nametest0";
+                  final surname = "surnametest0";
+                  context.read<AuthBloc>().add(SignUpRequested(email, password, name, surname));
                 },
                 child: Text('Register'),
               ),

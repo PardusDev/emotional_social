@@ -1,5 +1,6 @@
 import 'package:emotional_social/blocs/auth/auth_bloc.dart';
 import 'package:emotional_social/screens/post_detail_screen.dart';
+import 'package:emotional_social/widgets/HomeScreenPostText.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                               Text(dateFormat.format(DateTime.now()))
                             ],
                           ),
-                          subtitle: Text(post.content),
+                          subtitle: HomeScreenPostText(text: post.content, maxCharacters: 65),
                         ),
                       );
                     },

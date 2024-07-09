@@ -1,12 +1,14 @@
 import 'package:emotional_social/widgets/right_transition.dart';
 import 'package:flutter/material.dart';
 
+import '../models/Post.dart';
 import '../screens/post_detail_screen.dart';
 
 class HomeScreenPostText extends StatelessWidget {
   final String text;
   final int maxCharacters;
-  const HomeScreenPostText({super.key, required this.text, required this.maxCharacters});
+  final Post post;
+  const HomeScreenPostText({super.key, required this.text, required this.maxCharacters, required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class HomeScreenPostText extends StatelessWidget {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) => PostDetailPage(),
+                    pageBuilder: (context, animation, secondaryAnimation) => PostDetailPage(post: post),
                     transitionsBuilder: rightTransition,
                   ),
                 );

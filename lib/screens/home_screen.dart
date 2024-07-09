@@ -20,16 +20,34 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _postContentController = TextEditingController();
   User? user = FirebaseAuth.instance.currentUser;
+  late ScrollController _scrollController;
+  late PostBloc _postBloc;
 
   @override
   void initState() {
     super.initState();
-    context.read<PostBloc>().add(LoadPosts());
+    _postBloc = context.read<PostBloc>();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+
+    _postBloc.add(LoadPosts());
     // TODO: Check user is available
+  }
+
+  void _onScroll() {
+    if (_isEnd) _postBloc.add(LoadMorePosts());
+  }
+
+  bool get _isEnd {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    return currentScroll >= (maxScroll * 0.9);
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _postContentController.dispose();
     super.dispose();
   }
@@ -83,28 +101,40 @@ class _HomePageState extends State<HomePage> {
                   return Center(child: CircularProgressIndicator());
                 } else if (state is PostLoaded) {
                   return ListView.builder(
-                    itemCount: state.posts.length,
+                    controller: _scrollController,
+                    itemCount: state.hasReachedMax
+                                ? state.posts.length
+                                : state.posts.length + 1,
                     itemBuilder: (context, index) {
-                      final post = state.posts[index];
-                      final dateFormat = DateFormat("yyyy.MM.dd HH:mm");
+                      if (index >= state.posts.length) {
+                        return Center(child: CircularProgressIndicator(),);
+                      } else {
+                        final post = state.posts[index];
+                        final dateFormat = DateFormat("yyyy.MM.dd HH:mm");
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(context, PageRouteBuilder(
-                              pageBuilder: (context, animation, secondaryAnimation) => PostDetailPage(), transitionsBuilder: rightTransition )
-                          );
-                        },
-                        child: ListTile(
-                          title: Row(
-                            children: [
-                              Text(post.author), //uid
-                              Text(" - "),
-                              Text(dateFormat.format(DateTime.now()))
-                            ],
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, PageRouteBuilder(
+                                pageBuilder: (context, animation,
+                                    secondaryAnimation) =>
+                                    PostDetailPage(post: post),
+                                transitionsBuilder: rightTransition)
+                            );
+                          },
+                          child: ListTile(
+                            title: Row(
+                              children: [
+                                Text(post.author), //uid
+                                Text(" - "),
+                                Text(dateFormat.format(DateTime.now()))
+                              ],
+                            ),
+                            subtitle: HomeScreenPostText(text: post.content,
+                              maxCharacters: 65,
+                              post: post,),
                           ),
-                          subtitle: HomeScreenPostText(text: post.content, maxCharacters: 65),
-                        ),
-                      );
+                        );
+                      }
                     },
                   );
                 } else {

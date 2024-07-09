@@ -7,10 +7,11 @@ class PostRepository {
 
   PostRepository({FirebaseFirestore? firebaseFirestore}) : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Stream<List<Post>> getPosts() {
+  Stream<List<Post>> getPosts({required int page, int pageSize = 10}) {
     return _firebaseFirestore
         .collection('posts')
         .orderBy('sharedDate', descending: true)
+        .limit(page * pageSize)
         .snapshots()
         .asyncMap((snapshot) async {
       List<Post> posts = [];

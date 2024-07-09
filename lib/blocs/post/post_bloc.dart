@@ -9,13 +9,14 @@ part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final PostRepository _postRepository;
+  int _currentPage = 1;
 
   PostBloc({required PostRepository postRepository})
       : _postRepository = postRepository,
         super(PostInitial()) {
     on<LoadPosts>((event, emit) {
       emit(PostLoading());
-      _postRepository.getPosts().listen((posts) {
+      _postRepository.getPosts(page: 1).listen((posts) {
         add(PostsUpdated(posts));
       });
     });
@@ -26,6 +27,18 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     on<PostsUpdated>((event, emit) {
       emit(PostLoaded(posts: event.posts));
+    });
+
+    on<LoadMorePosts>((event, emit) async {
+      if (state is PostLoaded) {
+        final currentState = state as PostLoaded;
+        if (currentState.hasReachedMax) return;
+
+        _currentPage++;
+        final posts = await _postRepository.getPosts(page: _currentPage).first;
+        emit(posts.isEmpty ? currentState.copyWith(hasReachedMax: true)
+        : PostLoaded(posts: currentState.posts + posts));
+      }
     });
   }
 }

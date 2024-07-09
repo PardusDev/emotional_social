@@ -27,3 +27,5 @@ class PostsUpdated extends PostEvent {
   @override
   List<Object> get props => [posts];
 }
+
+class LoadMorePosts extends PostEvent {}

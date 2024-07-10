@@ -111,7 +111,6 @@ class _HomePageState extends State<HomePage> {
                       } else {
                         final post = state.posts[index];
                         final dateFormat = DateFormat("yyyy.MM.dd HH:mm");
-
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(context, PageRouteBuilder(

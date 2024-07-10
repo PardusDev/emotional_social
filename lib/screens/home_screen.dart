@@ -1,5 +1,6 @@
 import 'package:emotional_social/blocs/auth/auth_bloc.dart';
 import 'package:emotional_social/screens/post_detail_screen.dart';
+import 'package:emotional_social/utilities/date_format.dart';
 import 'package:emotional_social/widgets/HomeScreenPostText.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +56,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(233, 235, 238, 1.0),
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Emotional Social'),
+        backgroundColor: Colors.transparent,
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -110,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                         return Center(child: CircularProgressIndicator(),);
                       } else {
                         final post = state.posts[index];
-                        final dateFormat = DateFormat("yyyy.MM.dd HH:mm");
+                        final dateFormat = formatAccordingToNow(post.sharedDate);
                         return GestureDetector(
                           onTap: () {
                             Navigator.push(context, PageRouteBuilder(
@@ -125,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Text(post.author), //uid
                                 Text(" - "),
-                                Text(dateFormat.format(DateTime.now()))
+                                Text(dateFormat)
                               ],
                             ),
                             subtitle: HomeScreenPostText(text: post.content,

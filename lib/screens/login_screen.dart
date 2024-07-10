@@ -1,3 +1,4 @@
+import 'package:emotional_social/screens/register_screen.dart';
 import 'package:emotional_social/widgets/DividerWithText.dart';
 import 'package:emotional_social/widgets/OneLineTextField.dart';
 import 'package:emotional_social/widgets/UserInputField.dart';
@@ -29,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
@@ -36,6 +38,11 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Spacer(),
+                Image.asset(
+                  "assets/images/login_header.png",
+                  width: 240,
+                ),
+                SizedBox(height: 56,),
                 UserInputField(
                     hintText: 'E-Mail',
                     controller: _emailController,
@@ -73,12 +80,16 @@ class _LoginPageState extends State<LoginPage> {
                                 style: TextStyle(
                                   color: Colors.grey.withOpacity(0.8),
                                   fontWeight: FontWeight.w600
-                                )    
+                                )
                         ),
                         WidgetSpan(
                             child: GestureDetector(
                               onTap: () {
                                 print("Register text button clicked.");
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const RegisterPage())
+                                );
                               },
                               child: Text("Register!",
                               style: TextStyle(

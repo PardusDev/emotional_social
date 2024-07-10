@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import '../blocs/post/post_bloc.dart';
 import '../models/Post.dart';
 import '../widgets/right_transition.dart';
+import 'login_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -65,6 +66,8 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.logout),
             onPressed: () {
               context.read<AuthBloc>().add(SignOutRequested());
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginPage()),
+                      (Route<dynamic> route) => false);
             },
           )
         ],
@@ -86,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                         id: DateTime.now().toString(),
                         content: content,
                         authorId: user!.uid,
-                        author: "test",
+                        author: user!.displayName.toString(),
                         sharedDate: DateTime.now()
                       );
                       context.read<PostBloc>().add(AddPost(post));

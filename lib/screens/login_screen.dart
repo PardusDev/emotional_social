@@ -70,6 +70,15 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // TODO: Google icon
+                    IconButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(GoogleSignInRequested());
+                      },
+                      iconSize: 40,
+                      icon: Image.asset("assets/images/brands/google.png",
+                        width: 40,
+                      ),
+                    )
                   ],
                 ),
                 Spacer(),

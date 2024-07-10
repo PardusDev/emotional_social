@@ -45,5 +45,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _authRepository.signOut();
       emit(AuthInitial());
     });
+
+    on<GoogleSignInRequested>((event, emit) async {
+      emit(AuthLoading());
+      final user = await _authRepository.signInWithGoogle();
+      if (user != null) {
+        emit(AuthAuthenticated(user: user));
+      } else {
+        emit(AuthError('Google sign-in failed.'));
+      }
+    });
   }
 }

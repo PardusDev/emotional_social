@@ -8,19 +8,25 @@ class HomeScreenPostText extends StatelessWidget {
   final String text;
   final int maxCharacters;
   final Post post;
-  const HomeScreenPostText({super.key, required this.text, required this.maxCharacters, required this.post});
+  HomeScreenPostText({super.key, required this.text, required this.maxCharacters, required this.post});
+
+  late TextStyle textStyle = TextStyle(
+      color: Colors.black.withOpacity(0.6),
+      fontSize: 14,
+      fontWeight: FontWeight.w600
+  );
 
   @override
   Widget build(BuildContext context) {
     if (text.length <= maxCharacters) {
-      return Text(text);
+      return Text(text, style: textStyle,);
     }
     return RichText(
       text: TextSpan(
         children: [
           TextSpan(
             text: text.substring(0, maxCharacters) + '...',
-            style: TextStyle(color: Colors.black),
+            style: textStyle,
           ),
           WidgetSpan(
             child: GestureDetector(

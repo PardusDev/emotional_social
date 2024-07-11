@@ -1,7 +1,9 @@
+import 'package:emotional_social/screens/home_screen.dart';
 import 'package:emotional_social/screens/register_screen.dart';
 import 'package:emotional_social/widgets/DividerWithText.dart';
 import 'package:emotional_social/widgets/OneLineTextField.dart';
 import 'package:emotional_social/widgets/UserInputField.dart';
+import 'package:emotional_social/widgets/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,9 +26,9 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          print("logged");
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
         } else if (state is AuthError) {
-          print("An error");
+          ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("An error occured. Please try again."));
         }
       },
       child: Scaffold(

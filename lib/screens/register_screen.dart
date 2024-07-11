@@ -235,7 +235,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     tempUser = widget.tempUser;
   }

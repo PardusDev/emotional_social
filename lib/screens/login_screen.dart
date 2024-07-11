@@ -73,7 +73,6 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // TODO: Google icon
                     IconButton(
                       onPressed: () {
                         context.read<AuthBloc>().add(GoogleSignInRequested());

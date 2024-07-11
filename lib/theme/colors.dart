@@ -18,7 +18,7 @@ class AppColors {
   static const Color postContentTextColor = Color.fromRGBO(0, 0, 0, 0.6);
   static const Color readMoreTextColor = Colors.blueAccent;
 
-  static const Color primaryTextColor = Colors.black; // Will change
+  static const Color primaryTextColor = Colors.black;
   static const Color secondaryTextColor = Colors.black38;
 
   static const Color loginBackgroundColor = Colors.white;

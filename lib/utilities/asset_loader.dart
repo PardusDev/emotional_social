@@ -11,6 +11,6 @@ String getEmotionAsset(int emotion) {
     case 4:
       return 'assets/images/emojis/angry.png';
     default:
-      return 'assets/images/happy.png'; // TODO: Change
+      return 'assets/images/happy.png';
   }
 }

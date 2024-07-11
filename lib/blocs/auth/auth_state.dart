@@ -17,7 +17,6 @@ class AuthAuthenticated extends AuthState {
   const AuthAuthenticated({required this.user});
 
   @override
-  // TODO: implement props
   List<Object> get props => [user];
 }
 
@@ -27,6 +26,5 @@ class AuthError extends AuthState {
   const AuthError(this.message);
 
   @override
-  // TODO: implement props
   List<Object> get props => [message];
 }

@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage> {
     _scrollController.addListener(_onScroll);
 
     _postBloc.add(LoadPosts());
-    // TODO: Check user is available
   }
 
   void _onScroll() {

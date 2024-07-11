@@ -24,6 +24,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     on<AddPost>((event, emit) async {
       await _postRepository.addPost(event.post);
+      if (state is PostLoaded) {
+        final currentState = state as PostLoaded;
+        final updatedPosts = [event.post, ...currentState.posts];
+        emit(currentState.copyWith(posts: updatedPosts));
+      } else {
+        add(LoadPosts());
+      }
     });
 
     on<PostsUpdated>((event, emit) {

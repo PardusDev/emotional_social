@@ -33,7 +33,7 @@ class PostRepository {
         id: doc.id,
         content: postData['content'],
         authorId: postData["authorId"],
-        author: "${userData["name"]} ${userData["surname"]}",
+        author: userData["surname"].isNotEmpty ? "${userData["name"]}" : "${userData["name"]} ${userData["surname"]}",
         emotion: postData["emotion"],
         sharedDate: postData["sharedDate"].toDate()
       );

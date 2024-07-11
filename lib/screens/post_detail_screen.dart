@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/Emotion.dart';
 import '../models/Post.dart';
+import '../theme/colors.dart';
 import '../utilities/asset_loader.dart';
 
 class PostDetailPage extends StatefulWidget {
@@ -28,17 +29,17 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final dateFormat = formatAccordingToNow(post.sharedDate);
 
     return Scaffold(
-      backgroundColor: Color.fromRGBO(233, 235, 238, 1.0),
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text("Post Detail"),
+        backgroundColor: AppColors.postDetailPageAppBarBgColor,
+        title: const Text("Post Detail"),
       ),
       body: Column(
         children: [
           Material(
             elevation: 1.0,
             child: Container(
-              color: Colors.white, // Beyaz arka plan
+              color: AppColors.postBg, // Beyaz arka plan
               padding: const EdgeInsets.all(18.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,34 +48,34 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     children: [
                       Text(
                         post.author,
-                        style: TextStyle(
-                          color: Colors.black87,
+                        style: const TextStyle(
+                          color: AppColors.authorNameSurnameColor,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
                       ), //uid
-                      SizedBox(width: 10.0),
-                      Icon(
+                      const SizedBox(width: 10.0),
+                      const Icon(
                         Icons.circle,
                         size: 8.0,
-                        color: Colors.black.withOpacity(0.4),
+                        color: AppColors.seperatorDotColor,
                       ),
-                      SizedBox(width: 10.0),
+                      const SizedBox(width: 10.0),
                       TextWithRoundedBackground(text: dateFormat),
                     ],
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   Row(
                     children: [
                       Text(
                         'Your friend feels ${Emotion.getEmotionName(post.emotion)}',
-                        style: TextStyle(
-                          color: Colors.black87,
+                        style: const TextStyle(
+                          color: AppColors.postFeelTextColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SizedBox(width: 5.0),
+                      const SizedBox(width: 5.0),
                       Image.asset(
                         getEmotionAsset(post.emotion),
                         height: 20,
@@ -82,11 +83,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 4.0),
+                  const SizedBox(height: 4.0),
                   Text(
                     post.content,
-                    style: TextStyle(
-                      color: Colors.black.withOpacity(0.6),
+                    style: const TextStyle(
+                      color: AppColors.postContentTextColor,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
@@ -97,7 +98,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           ),
           Expanded(
             child: Container(
-              color: Color.fromRGBO(233, 235, 238, 1.0), // Gri arka plan
+              color: AppColors.backgroundColor,
             ),
           ),
         ],

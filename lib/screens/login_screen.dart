@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/auth/auth_bloc.dart';
+import '../theme/colors.dart';
 import '../widgets/RoundedButton.dart';
 
 class LoginPage extends StatefulWidget {
@@ -32,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
       child: Scaffold(
+        backgroundColor: AppColors.loginBackgroundColor,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Padding(
@@ -89,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextSpan(text: "Don't have an account?  ",
                                 style: TextStyle(
-                                  color: Colors.grey.withOpacity(0.8),
+                                  color: AppColors.secondaryTextColor,
                                   fontWeight: FontWeight.w600
                                 )
                         ),
@@ -104,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                               child: Text("Register!",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: AppColors.primaryTextColor,
                                 fontWeight: FontWeight.w600
                               ),),
                             )
@@ -112,19 +114,6 @@ class _LoginPageState extends State<LoginPage> {
                       ]
                     ),
                 ),
-                /*
-                DEPRECATED
-                RoundedButton(
-                  onPressed: () {
-                    final email = _emailController.text;
-                    final password = _passwordController.text;
-                    final name = "nametest0";
-                    final surname = "surnametest0";
-                    context.read<AuthBloc>().add(SignUpRequested(email, password, name, surname));
-                 },
-                  text: 'Register',
-                ),
-                 */
               ],
             ),
           ),

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/auth/auth_bloc.dart';
 import '../models/User.dart';
+import '../theme/colors.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -20,8 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: Will change
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.registerBackgroundColor,
       body: NameSurnamePage(),
     );
   }
@@ -42,8 +42,7 @@ class _NameSurnamePageState extends State<NameSurnamePage> {
     fontSize: 22,
     fontWeight: FontWeight.w800,
     height: 1.2,
-    // TODO: Will change
-    color: Colors.black.withOpacity(0.7)
+    color: AppColors.registerHeaderTextColor
   );
 
   bool _isOK() {
@@ -70,8 +69,7 @@ class _NameSurnamePageState extends State<NameSurnamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: Will change
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.registerBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(22.0),
         child: Column(
@@ -146,13 +144,11 @@ class _EMailScreenState extends State<EMailScreen> {
       fontSize: 22,
       fontWeight: FontWeight.w800,
       height: 1.2,
-      // TODO: Will change
-      color: Colors.black.withOpacity(0.7)
+      color: AppColors.registerHeaderTextColor
   );
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     tempUser = widget.tempUser;
   }
@@ -160,8 +156,7 @@ class _EMailScreenState extends State<EMailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: Will change
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.registerBackgroundColor,
         body: Padding(
           padding: const EdgeInsets.all(22.0),
           child: Column(
@@ -193,11 +188,11 @@ class _EMailScreenState extends State<EMailScreen> {
                     if (_emailController.text.isEmpty ||
                         !_emailController.text.contains('@') ||
                         !_emailController.text.contains('.')) {
-                      ScaffoldMessenger.of(context).showSnackBar(errorSnackBar('E-Posta adresi doğru formatta değil.'));
+                      ScaffoldMessenger.of(context).showSnackBar(errorSnackBar('The email address is not in the correct format.'));
                       return;
                     }
                     if (_emailController.text.length >= 52) {
-                      ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("E-Posta adresi 52 karakterden fazla olamaz."));
+                      ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("The email address cannot exceed 52 characters."));
                       return;
                     }
                     _emailController.text = _emailController.text.trim();
@@ -235,8 +230,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
       fontSize: 22,
       fontWeight: FontWeight.w800,
       height: 1.2,
-      // TODO: Will change
-      color: Colors.black.withOpacity(0.7)
+      color: AppColors.registerHeaderTextColor
   );
 
   @override
@@ -258,8 +252,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
         }
       },
       child: Scaffold(
-        // TODO: Will change
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.registerBackgroundColor,
           body: Padding(
             padding: const EdgeInsets.all(22.0),
             child: Column(
@@ -290,26 +283,11 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   child: ContinueButton(
                     onPressed: () {
                       if (_passwordController.text.length < 8) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Row(
-                              children: [
-                                Icon(
-                                  Icons.error,
-                                  color: Colors.red,
-                                ),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                Text('Şifre minimum 8 karakter uzunluğunda olmalı.'),
-                              ],
-                            ),
-                          ),
-                        );
+                        ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("The password must be at least 8 characters long."));
                         return;
                       }
                       if (_passwordController.text.length > 32) {
-                        ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("Şifre 32 karakterden fazla olamaz."));
+                        ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("The password cannot exceed 32 characters."));
                         return;
                       }
                       _passwordController.text = _passwordController.text.trim();

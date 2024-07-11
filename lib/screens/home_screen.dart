@@ -1,5 +1,6 @@
 import 'package:emotional_social/blocs/auth/auth_bloc.dart';
 import 'package:emotional_social/screens/post_detail_screen.dart';
+import 'package:emotional_social/theme/colors.dart';
 import 'package:emotional_social/utilities/date_format.dart';
 import 'package:emotional_social/widgets/HomeScreenPostText.dart';
 import 'package:emotional_social/widgets/TextWithRoundedBackground.dart';
@@ -74,16 +75,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(233, 235, 238, 1.0),
+      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
-        title: Text('Emotional Social'),
-        backgroundColor: Colors.transparent,
+        title: const Text('Emotional Social'),
+        backgroundColor: AppColors.homePageAppBarBgColor,
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () {
               context.read<AuthBloc>().add(SignOutRequested());
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginPage()),
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginPage()),
                       (Route<dynamic> route) => false);
             },
           )
@@ -97,13 +98,13 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  SizedBox(height: 6.0,),
+                  const SizedBox(height: 6.0,),
                   TextField(
                     controller: _postContentController,
                     decoration: InputDecoration(
                       labelText: 'Share your emotions',
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.send),
+                        icon: const Icon(Icons.send, color: AppColors.sendButtonBg,),
                         onPressed: () {
                           final content = _postContentController.text;
                           if (content.isNotEmpty) {
@@ -122,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 28.0),
+                  const SizedBox(height: 28.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: emotions.map((emotion) {
@@ -140,18 +141,18 @@ class _HomePageState extends State<HomePage> {
                                 height: 40,
                                 width: 40,
                               ),
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30.0),
                                 color: _selectedEmotion == emotion
-                                    ? Colors.blue
-                                    : Colors.grey,
+                                    ? AppColors.selectedEmotionBg
+                                    : AppColors.unSelectedEmotionBg,
                               ),
                             ),
                             if (_selectedEmotion == emotion)
-                              Icon(
+                              const Icon(
                                 Icons.check_circle,
-                                color: Colors.blue,
+                                color: AppColors.selectedEmotionBg,
                                 size: 20,
                               ),
                           ],
@@ -162,26 +163,26 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(height: 8.0,),
+            const SizedBox(height: 8.0,),
               BlocBuilder<PostBloc, PostState>(
                 builder: (context, state) {
                   if (state is PostLoading) {
-                    return Center(child: Padding(
-                      padding: const EdgeInsets.all(18.0),
+                    return const Center(child: Padding(
+                      padding: EdgeInsets.all(18.0),
                       child: LoadingDot(),
                     ));
                   } else if (state is PostLoaded) {
                     if (state.posts.isEmpty) {
-                      return Center(child: Text('No posts yet. 😥', style: TextStyle(
-                        color: Colors.black38,
+                      return const Center(child: Text('No posts yet. 😥', style: TextStyle(
+                        color: AppColors.secondaryTextColor,
                         fontWeight: FontWeight.w700,
                         fontSize: 18,
                       ),),);
                     }
                   return ListView.separated(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    separatorBuilder: (context, index) => SizedBox(
+                    separatorBuilder: (context, index) => const SizedBox(
                       height: 18,
                     ),
                     itemCount: state.hasReachedMax
@@ -191,9 +192,9 @@ class _HomePageState extends State<HomePage> {
                       if (index >= state.posts.length) {
                         return state.hasReachedMax  // Bu kontrol eklendi
                             ? Container()
-                            : Center(
+                            : const Center(
                           child: Padding(
-                            padding: const EdgeInsets.only(bottom: 18.0),
+                            padding: EdgeInsets.only(bottom: 18.0),
                             child: LoadingDot(),
                           ),
                         );
@@ -211,36 +212,36 @@ class _HomePageState extends State<HomePage> {
                           },
                           child: Material(
                             elevation: 4.0,
-                            shadowColor: Colors.grey.withOpacity(0.3),
+                            shadowColor: AppColors.shadowColor,
                             child: ListTile(
-                              tileColor: Colors.white,
+                              tileColor: AppColors.homePagePostBgColor,
                               title: Column(
                                 children: [
                                   Row(
                                     children: [
-                                      Text(post.author, style: TextStyle(
-                                        color: Colors.black87,
+                                      Text(post.author, style: const TextStyle(
+                                        color: AppColors.authorNameSurnameColor,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600
                                       ),), //uid
-                                      SizedBox(width: 10.0,),
-                                      Icon(Icons.circle, size: 8.0, color: Colors.black.withOpacity(0.4),),
-                                      SizedBox(width: 10.0,),
+                                      const SizedBox(width: 10.0,),
+                                      const Icon(Icons.circle, size: 8.0, color: AppColors.seperatorDotColor,),
+                                      const SizedBox(width: 10.0,),
                                       TextWithRoundedBackground(text: dateFormat),
                                     ],
                                   ),
-                                  SizedBox(height: 6.0,),
+                                  const SizedBox(height: 6.0,),
                                   Row(
                                     children: [
                                       Text(
                                         'Your friend feels ${Emotion.getEmotionName(post.emotion)}',
-                                        style: TextStyle(
-                                          color: Colors.black87,
+                                        style: const TextStyle(
+                                          color: AppColors.postFeelTextColor,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      SizedBox(width: 5.0),
+                                      const SizedBox(width: 5.0),
                                       Image.asset(
                                         getEmotionAsset(post.emotion),
                                         height: 20,
@@ -264,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
                 } else {
-                  return Center(child: Text('No posts yet.'));
+                  return const Center(child: Text('No posts yet.'));
                 }
               },
             )

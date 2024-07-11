@@ -10,15 +10,16 @@ part 'post_state.dart';
 class PostBloc extends Bloc<PostEvent, PostState> {
   final PostRepository _postRepository;
   int _currentPage = 1;
+  static const int _pageSize = 10;
 
   PostBloc({required PostRepository postRepository})
       : _postRepository = postRepository,
         super(PostInitial()) {
-    on<LoadPosts>((event, emit) {
+    on<LoadPosts>((event, emit) async {
+      _currentPage = 1;
       emit(PostLoading());
-      _postRepository.getPosts(page: 1).listen((posts) {
-        add(PostsUpdated(posts));
-      });
+      final posts = await _postRepository.getPosts(page: _currentPage, pageSize: _pageSize);
+      add(PostsUpdated(posts));
     });
 
     on<AddPost>((event, emit) async {
@@ -26,7 +27,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     });
 
     on<PostsUpdated>((event, emit) {
-      emit(PostLoaded(posts: event.posts));
+      emit(PostLoaded(posts: event.posts, hasReachedMax: event.posts.length < _pageSize));
     });
 
     on<LoadMorePosts>((event, emit) async {
@@ -35,9 +36,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         if (currentState.hasReachedMax) return;
 
         _currentPage++;
-        final posts = await _postRepository.getPosts(page: _currentPage).first;
+        final posts = await _postRepository.getPosts(page: _currentPage, pageSize: _pageSize);
         emit(posts.isEmpty ? currentState.copyWith(hasReachedMax: true)
-        : PostLoaded(posts: currentState.posts + posts));
+        : PostLoaded(posts: currentState.posts + posts, hasReachedMax: posts.length < _pageSize));
       }
     });
   }

@@ -1,4 +1,5 @@
 import 'package:emotional_social/widgets/right_transition.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../models/Post.dart';
@@ -34,9 +35,15 @@ class _HomeScreenPostTextState extends State<HomeScreenPostText> {
             text: '${widget.text.substring(0, widget.maxCharacters)}...',
             style: textStyle,
           ),
-          WidgetSpan(
-            child: GestureDetector(
-              onTap: () {
+          TextSpan(
+            text: " Read More",
+            style: TextStyle(
+                color: AppColors.readMoreTextColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w600
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
@@ -44,12 +51,7 @@ class _HomeScreenPostTextState extends State<HomeScreenPostText> {
                     transitionsBuilder: rightTransition,
                   ),
                 );
-              },
-              child: const Text(
-                " Read More",
-                style: TextStyle(color: AppColors.readMoreTextColor),
-              ),
-            ),
+              }
           ),
         ],
       ),

@@ -64,7 +64,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       TextWithRoundedBackground(text: dateFormat),
                     ],
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 4.0),
                   Row(
                     children: [
                       Text(

@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:emotional_social/repositories/auth_repository.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+
+import '../../models/User.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -17,7 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user != null) {
         final userModel = await _authRepository.getUserByUID(user.uid);
         if(userModel != null) {
-          emit(AuthAuthenticated(user: user));
+          emit(AuthAuthenticated(user: user, userModel: userModel));
         } else {
           emit(const AuthError('User details not found.'));
         }
@@ -32,7 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user != null) {
         final userModel = await _authRepository.getUserByUID(user.uid);
         if (userModel != null) {
-          emit(AuthAuthenticated(user: user));
+          emit(AuthAuthenticated(user: user, userModel: userModel));
         } else {
           emit(const AuthError('User details not found.'));
         }
@@ -50,7 +52,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
       final user = await _authRepository.signInWithGoogle();
       if (user != null) {
-        emit(AuthAuthenticated(user: user));
+        final userModel = await _authRepository.getUserByUID(user.uid);
+        if (userModel != null) {
+          emit(AuthAuthenticated(user: user, userModel: userModel));
+        } else {
+          emit(const AuthError('User details not found.'));
+        }
       } else {
         emit(const AuthError('Google sign-in failed.'));
       }

@@ -62,6 +62,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = context.watch<AuthBloc>().state;
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
@@ -93,19 +95,22 @@ class _HomePageState extends State<HomePage> {
                       labelText: 'Share your emotions',
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.send, color: AppColors.sendButtonBg,),
-                        onPressed: () {
+                        onPressed: () async {
                           final content = _postContentController.text;
                           if (content.isNotEmpty) {
-                            final post = Post(
-                                id: DateTime.now().toString(),
-                                content: content,
-                                authorId: user!.uid,
-                                author: user!.displayName.toString(),
-                                emotion: _selectedEmotion,
-                                sharedDate: DateTime.now()
-                            );
-                            context.read<PostBloc>().add(AddPost(post));
-                            _postContentController.clear();
+                            if (authState is AuthAuthenticated) {
+                              //DEPRECATED: final userInfo = await _authRepository.getUserByUID(user!.uid);
+                              final post = Post(
+                                  id: DateTime.now().toString(),
+                                  content: content,
+                                  authorId: user!.uid,
+                                  author: authState.userModel.surname.isEmpty ? authState.userModel.name : "${authState.userModel.name} ${authState.userModel.surname}",
+                                  emotion: _selectedEmotion,
+                                  sharedDate: DateTime.now()
+                              );
+                              context.read<PostBloc>().add(AddPost(post));
+                              _postContentController.clear();
+                            }
                           }
                         },
                       ),

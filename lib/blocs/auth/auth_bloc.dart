@@ -19,10 +19,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if(userModel != null) {
           emit(AuthAuthenticated(user: user));
         } else {
-          emit(AuthError('User details not found.'));
+          emit(const AuthError('User details not found.'));
         }
       } else {
-        emit(AuthError('Login failed.'));
+        emit(const AuthError('Login failed.'));
       }
     });
 
@@ -34,10 +34,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (userModel != null) {
           emit(AuthAuthenticated(user: user));
         } else {
-          emit(AuthError('User details not found.'));
+          emit(const AuthError('User details not found.'));
         }
       } else {
-        emit(AuthError('Login failed'));
+        emit(const AuthError('Login failed'));
       }
     });
 
@@ -52,7 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (user != null) {
         emit(AuthAuthenticated(user: user));
       } else {
-        emit(AuthError('Google sign-in failed.'));
+        emit(const AuthError('Google sign-in failed.'));
       }
     });
   }

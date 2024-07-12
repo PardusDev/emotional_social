@@ -124,17 +124,17 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           children: [
                             Container(
-                              child: Image.asset(
-                                getEmotionAsset(emotion),
-                                height: 40,
-                                width: 40,
-                              ),
                               padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30.0),
                                 color: _selectedEmotion == emotion
                                     ? AppColors.selectedEmotionBg
                                     : AppColors.unSelectedEmotionBg,
+                              ),
+                              child: Image.asset(
+                                getEmotionAsset(emotion),
+                                height: 40,
+                                width: 40,
                               ),
                             ),
                             if (_selectedEmotion == emotion)
@@ -178,7 +178,7 @@ class _HomePageState extends State<HomePage> {
                                 : state.posts.length + 1,
                     itemBuilder: (context, index) {
                       if (index >= state.posts.length) {
-                        return state.hasReachedMax  // Bu kontrol eklendi
+                        return state.hasReachedMax
                             ? Container()
                             : const Center(
                           child: Padding(

@@ -87,10 +87,10 @@ class AuthRepository {
 
       return userCredential.user;
     } on auth.FirebaseAuthException catch (e) {
-      print('Firebase Google Auth Exception: ${e.message}');
+      Exception('Firebase Google Auth Exception: ${e.message}');
       return null;
     } catch (e) {
-      print('Firebase Google Auth GENERAL Exception: ${e.toString()}');
+      Exception('Firebase Google Auth GENERAL Exception: ${e.toString()}');
       return null;
     }
   }

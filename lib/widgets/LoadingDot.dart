@@ -43,7 +43,7 @@ class AnimatedDot extends StatelessWidget {
   final AnimationController controller;
   final double delay;
 
-  AnimatedDot({required this.controller, required this.delay});
+  const AnimatedDot({super.key, required this.controller, required this.delay});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class AnimatedDot extends StatelessWidget {
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(60 * (.5 - controller.value.abs()), 0),
-          child: Dot(),
+          child: const Dot(),
         );
       },
     );
@@ -60,12 +60,14 @@ class AnimatedDot extends StatelessWidget {
 }
 
 class Dot extends StatelessWidget {
+  const Dot({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 16,
       height: 16,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.loadingDotColor,
         shape: BoxShape.circle,
       ),

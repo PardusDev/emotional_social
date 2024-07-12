@@ -1,7 +1,6 @@
 import 'package:emotional_social/screens/home_screen.dart';
 import 'package:emotional_social/screens/register_screen.dart';
 import 'package:emotional_social/widgets/DividerWithText.dart';
-import 'package:emotional_social/widgets/OneLineTextField.dart';
 import 'package:emotional_social/widgets/UserInputField.dart';
 import 'package:emotional_social/widgets/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +18,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("An error occured. Please try again."));
         }
@@ -41,24 +40,24 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Spacer(),
+                const Spacer(),
                 Image.asset(
                   "assets/images/login_header.png",
                   width: 240,
                 ),
-                SizedBox(height: 56,),
+                const SizedBox(height: 56,),
                 UserInputField(
                     hintText: 'E-Mail',
                     controller: _emailController,
                     obscureText: false
                 ),
-                SizedBox(height: 12,),
+                const SizedBox(height: 12,),
                 UserInputField(
                     hintText: 'Password',
                     controller: _passwordController,
                     obscureText: true
                 ),
-                SizedBox(height: 32,),
+                const SizedBox(height: 32,),
                 RoundedButton(
                   onPressed: () {
                     final email = _emailController.text;
@@ -67,9 +66,9 @@ class _LoginPageState extends State<LoginPage> {
                   },
                   text: 'Login',
                 ),
-                SizedBox(height: 18,),
-                DividerWithText(text: "or login with",),
-                SizedBox(height: 18,),
+                const SizedBox(height: 18,),
+                const DividerWithText(text: "or login with",),
+                const SizedBox(height: 18,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -84,11 +83,11 @@ class _LoginPageState extends State<LoginPage> {
                     )
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 RichText(
                     text: TextSpan(
                       children: [
-                        TextSpan(text: "Don't have an account?  ",
+                        const TextSpan(text: "Don't have an account?  ",
                                 style: TextStyle(
                                   color: AppColors.secondaryTextColor,
                                   fontWeight: FontWeight.w600
@@ -97,13 +96,12 @@ class _LoginPageState extends State<LoginPage> {
                         WidgetSpan(
                             child: GestureDetector(
                               onTap: () {
-                                print("Register text button clicked.");
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => const RegisterPage())
                                 );
                               },
-                              child: Text("Register!",
+                              child: const Text("Register!",
                               style: TextStyle(
                                 color: AppColors.primaryTextColor,
                                 fontWeight: FontWeight.w600

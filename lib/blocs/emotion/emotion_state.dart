@@ -1,9 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-import '../../models/Emotion.dart';
-
-import 'package:equatable/equatable.dart';
-
 class EmotionState extends Equatable {
   final int selectedEmotion;
 

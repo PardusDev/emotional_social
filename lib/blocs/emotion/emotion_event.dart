@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-import '../../models/Emotion.dart';
-
 abstract class EmotionEvent extends Equatable {
   const EmotionEvent();
 

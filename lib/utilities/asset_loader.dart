@@ -1,5 +1,3 @@
-import '../models/Emotion.dart';
-
 String getEmotionAsset(int emotion) {
   switch (emotion) {
     case 1:

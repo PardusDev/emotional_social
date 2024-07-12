@@ -20,7 +20,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppColors.registerBackgroundColor,
       body: NameSurnamePage(),
     );
@@ -35,10 +35,10 @@ class NameSurnamePage extends StatefulWidget {
 }
 
 class _NameSurnamePageState extends State<NameSurnamePage> {
-  final TextEditingController _nameController = new TextEditingController();
-  final TextEditingController _surnameController = new TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _surnameController = TextEditingController();
 
-  final TextStyle textStyle = TextStyle(
+  final TextStyle textStyle = const TextStyle(
     fontSize: 22,
     fontWeight: FontWeight.w800,
     height: 1.2,
@@ -82,29 +82,29 @@ class _NameSurnamePageState extends State<NameSurnamePage> {
                   TextSpan(text: "Hello! Let's get to know\neach other.",
                   style: textStyle,
                   ),
-                  WidgetSpan(child: SizedBox(width: 10,)),
+                  const WidgetSpan(child: SizedBox(width: 10,)),
                   WidgetSpan(child: Image.asset("assets/images/emojis/cute_smile.png",
                   height: (textStyle.fontSize! * textStyle.height!),))
                 ]
               )
             ),
-            SizedBox(height: 35,),
+            const SizedBox(height: 35,),
             UserInputField(
                 hintText: "Fist Name",
                 controller: _nameController
             ),
-            SizedBox(height: 10,),
+            const SizedBox(height: 10,),
             UserInputField(
                 hintText: "Last Name",
                 controller: _surnameController
             ),
-            SizedBox(height: 25,),
+            const SizedBox(height: 25,),
             Align(
               alignment: Alignment.centerRight,
               child: ContinueButton(
                 onPressed: () {
                   if(_isOK()) {
-                    User tempUser = new User(
+                    User tempUser = User(
                       name: _nameController.text,
                       surname: _surnameController.text,
                         uid: '',
@@ -137,10 +137,10 @@ class EMailScreen extends StatefulWidget {
 }
 
 class _EMailScreenState extends State<EMailScreen> {
-  final TextEditingController _emailController = new TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   late final User tempUser;
 
-  final TextStyle textStyle = TextStyle(
+  final TextStyle textStyle = const TextStyle(
       fontSize: 22,
       fontWeight: FontWeight.w800,
       height: 1.2,
@@ -169,18 +169,18 @@ class _EMailScreenState extends State<EMailScreen> {
                         TextSpan(text: "Can you share your\nemail with us?",
                           style: textStyle,
                         ),
-                        WidgetSpan(child: SizedBox(width: 10,)),
+                        const WidgetSpan(child: SizedBox(width: 10,)),
                         WidgetSpan(child: Image.asset("assets/images/emojis/pensive.png",
                           height: (textStyle.fontSize! * textStyle.height!),))
                       ]
                   )
               ),
-              SizedBox(height: 35,),
+              const SizedBox(height: 35,),
               UserInputField(
                   hintText: "E-Mail",
                   controller: _emailController
               ),
-              SizedBox(height: 25,),
+              const SizedBox(height: 25,),
               Align(
                 alignment: Alignment.centerRight,
                 child: ContinueButton(
@@ -223,10 +223,10 @@ class PasswordScreen extends StatefulWidget {
 }
 
 class _PasswordScreenState extends State<PasswordScreen> {
-  final TextEditingController _passwordController = new TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   late final User tempUser;
 
-  final TextStyle textStyle = TextStyle(
+  final TextStyle textStyle = const TextStyle(
       fontSize: 22,
       fontWeight: FontWeight.w800,
       height: 1.2,
@@ -244,7 +244,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
       listener: (context, state) {
         if (state is AuthAuthenticated) {
           // Remove all other screens.
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomePage()),
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomePage()),
               (Route<dynamic> route) => false);
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("An error occured. Please try again."));
@@ -261,22 +261,24 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 RichText(
                     text: TextSpan(
                         children: [
-                          TextSpan(text: "To keep your account secure,\nplease enter your password.",
-                            style: textStyle,
-                          ),
-                          WidgetSpan(child: SizedBox(width: 10,)),
-                          WidgetSpan(child: Image.asset("assets/images/emojis/keylock.png",
-                            height: (textStyle.fontSize! * textStyle.height!),))
+                            TextSpan(text: "To keep your account secure,\nplease enter your password.",
+                              style: textStyle,
+                            ),
+                            const WidgetSpan(child: SizedBox(width: 10,)),
+                            WidgetSpan(child: Image.asset("assets/images/emojis/keylock.png",
+                              height: (textStyle.fontSize! * textStyle.height!),
+                            )
+                          )
                         ]
                     )
                 ),
-                SizedBox(height: 35,),
+                const SizedBox(height: 35,),
                 UserInputField(
                     hintText: "Password",
                     controller: _passwordController,
                     obscureText: true,
                 ),
-                SizedBox(height: 25,),
+                const SizedBox(height: 25,),
                 Align(
                   alignment: Alignment.centerRight,
                   child: ContinueButton(

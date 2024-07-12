@@ -39,7 +39,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           Material(
             elevation: 1.0,
             child: Container(
-              color: AppColors.postBg, // Beyaz arka plan
+              color: AppColors.postBg,
               padding: const EdgeInsets.all(18.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

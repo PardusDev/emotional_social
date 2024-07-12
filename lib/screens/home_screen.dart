@@ -7,10 +7,7 @@ import 'package:emotional_social/widgets/TextWithRoundedBackground.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
-import '../blocs/emotion/emotion_bloc.dart';
-import '../blocs/emotion/emotion_state.dart';
 import '../blocs/post/post_bloc.dart';
 import '../models/Emotion.dart';
 import '../models/Post.dart';
@@ -54,14 +51,6 @@ class _HomePageState extends State<HomePage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     return currentScroll >= (maxScroll * 0.9);
-  }
-
-  bool _hasReachedMaxState () {
-    final state = _postBloc.state;
-    if (state is PostLoaded) {
-      return state.hasReachedMax;
-    }
-    return false;
   }
 
   @override
@@ -224,7 +213,7 @@ class _HomePageState extends State<HomePage> {
                                         fontWeight: FontWeight.w600
                                       ),), //uid
                                       const SizedBox(width: 10.0,),
-                                      const Icon(Icons.circle, size: 8.0, color: AppColors.seperatorDotColor,),
+                                      const Icon(Icons.circle, size: 8.0, color: AppColors.separatorDotColor,),
                                       const SizedBox(width: 10.0,),
                                       TextWithRoundedBackground(text: dateFormat),
                                     ],

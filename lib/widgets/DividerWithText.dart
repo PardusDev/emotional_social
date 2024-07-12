@@ -1,3 +1,4 @@
+import 'package:emotional_social/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class DividerWithText extends StatelessWidget {
@@ -13,8 +14,8 @@ class DividerWithText extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(text, style: TextStyle(
-            color: Colors.grey.withOpacity(0.8)
+          child: Text(text, style: const TextStyle(
+            color: AppColors.dividerTextColor
           ),),
         ),
         const Expanded(

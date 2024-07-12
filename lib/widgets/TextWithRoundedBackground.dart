@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/colors.dart';
+
 class TextWithRoundedBackground extends StatelessWidget {
   final String text;
   const TextWithRoundedBackground({super.key, required this.text});
@@ -7,13 +9,13 @@ class TextWithRoundedBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.3),
+        color: AppColors.dateBackgroundColor,
         borderRadius: BorderRadius.circular(18.0),
       ),
-      child: Text(text, style: TextStyle(
-        color: Colors.white,
+      child: Text(text, style: const TextStyle(
+        color: AppColors.dateTextColor,
         fontSize: 12
       ),),
     );

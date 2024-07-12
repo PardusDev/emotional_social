@@ -1,3 +1,4 @@
+import 'package:emotional_social/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class UserInputField extends StatelessWidget {
@@ -24,18 +25,18 @@ class UserInputField extends StatelessWidget {
       obscureText: obscureText,
       decoration: InputDecoration(
         hintText: hintText,
-        border: OutlineInputBorder(),
-        contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 22.0),
-        fillColor: Colors.white,
+        border: const OutlineInputBorder(),
+        contentPadding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 22.0),
+        fillColor: AppColors.userInputFieldBackground,
         filled: true,
         floatingLabelBehavior: FloatingLabelBehavior.always,
           enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+              borderSide: const BorderSide(color: AppColors.userInputFieldEnabledBorderColor, width: 2),
               borderRadius: BorderRadius.circular(30)
           ),
-          floatingLabelStyle: TextStyle(color: Colors.black, fontSize: 18),
+          floatingLabelStyle: const TextStyle(color: AppColors.userInputFieldFloatingLabelColor, fontSize: 18),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black, width: 1.5),
+              borderSide: const BorderSide(color: AppColors.userInputFieldFocusedBorderColor, width: 1.5),
               borderRadius: BorderRadius.circular(30)
           )
       ),

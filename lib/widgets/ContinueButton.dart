@@ -1,3 +1,4 @@
+import 'package:emotional_social/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class ContinueButton extends StatelessWidget {
@@ -15,7 +16,7 @@ class ContinueButton extends StatelessWidget {
     // TODO: Color will change
     Icon icon = Icon(
     reverse ? Icons.keyboard_arrow_left : Icons.keyboard_arrow_right,
-    color: Colors.white,
+    color: AppColors.continueButtonTextColor,
     );
 
     return MaterialButton(
@@ -27,7 +28,7 @@ class ContinueButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30.0)
       ),
-      color: Colors.black,
+      color: AppColors.continueButtonColor,
       child: icon,
     );
   }

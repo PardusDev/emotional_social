@@ -58,7 +58,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       const Icon(
                         Icons.circle,
                         size: 8.0,
-                        color: AppColors.seperatorDotColor,
+                        color: AppColors.separatorDotColor,
                       ),
                       const SizedBox(width: 10.0),
                       TextWithRoundedBackground(text: dateFormat),

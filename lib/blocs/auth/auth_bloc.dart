@@ -14,34 +14,62 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required AuthRepository authRepository}) : _authRepository = authRepository, super(AuthInitial()) {
     on<SignInRequested>((event, emit) async {
       emit(AuthLoading());
-      final user = await _authRepository.signInWithEmailAndPassword(
-          event.email, event.password);
-      if (user != null) {
-        final userModel = await _authRepository.getUserByUID(user.uid);
-        if(userModel != null) {
-          emit(AuthAuthenticated(user: user, userModel: userModel));
+      try {
+        final user = await _authRepository.signInWithEmailAndPassword(
+            event.email, event.password);
+        if (user != null) {
+          final userModel = await _authRepository.getUserByUID(user.uid);
+          if(userModel != null) {
+            emit(AuthAuthenticated(user: user, userModel: userModel));
+          } else {
+            emit(const AuthError('User details not found.'));
+          }
         } else {
-          emit(const AuthError('User details not found.'));
+          emit(const AuthError('Login failed.'));
         }
-      } else {
-        emit(const AuthError('Login failed.'));
+      } on auth.FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          emit(const AuthError('No user found for that email.'));
+        } else if (e.code == 'wrong-password') {
+          emit(const AuthError('Wrong password provided.'));
+        } else {
+          emit(AuthError(e.message ?? 'An unknown error occurred.'));
+        }
+      } catch (e) {
+        emit(AuthError(e.toString()));
       }
+
     });
 
     on<SignUpRequested>((event, emit) async {
       emit(AuthLoading());
-      final user = await _authRepository.registerWithEmailAndPassword(event.email, event.password, event.name, event.surname);
-      if (user != null) {
-        final userModel = await _authRepository.getUserByUID(user.uid);
-        if (userModel != null) {
-          emit(AuthAuthenticated(user: user, userModel: userModel));
+      try {
+        final user = await _authRepository.registerWithEmailAndPassword(
+            event.email, event.password, event.name, event.surname);
+        if (user != null) {
+          final userModel = await _authRepository.getUserByUID(user.uid);
+          if (userModel != null) {
+            emit(AuthAuthenticated(user: user, userModel: userModel));
+          } else {
+            emit(const AuthError('User details not found.'));
+          }
         } else {
-          emit(const AuthError('User details not found.'));
+          emit(const AuthError('Login failed'));
         }
-      } else {
-        emit(const AuthError('Login failed'));
+      } on auth.FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          emit(const AuthError('The email is already in use.'));
+        } else if (e.code == 'weak-password') {
+          emit(const AuthError('The password provided is too weak.'));
+        } else if (e.code == 'invalid-email') {
+          emit(const AuthError('The email address is not valid.'));
+        } else {
+          emit(AuthError(e.message ?? 'An unknown error occurred.'));
+        }
+      } catch (e) {
+        emit(AuthError(e.toString()));
       }
-    });
+});
 
     on<SignOutRequested>((event, emit) async {
       await _authRepository.signOut();

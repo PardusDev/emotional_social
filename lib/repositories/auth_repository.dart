@@ -22,8 +22,8 @@ class AuthRepository {
     try {
       auth.UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
       return userCredential.user;
-    } on auth.FirebaseAuthException {
-      return null;
+    } on auth.FirebaseAuthException catch (e) {
+      throw e;
     }
   }
 
@@ -40,8 +40,8 @@ class AuthRepository {
         await _firestore.collection('users').doc(newUser.uid).set(newUser.toDocument());
       }
       return userCredential.user;
-    } on auth.FirebaseAuthException {
-      return null;
+    } on auth.FirebaseAuthException catch (e) {
+      throw e;
     }
   }
 

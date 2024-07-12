@@ -247,7 +247,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomePage()),
               (Route<dynamic> route) => false);
         } else if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("An error occured. Please try again."));
+          ScaffoldMessenger.of(context).showSnackBar(errorSnackBar(state.message));
         }
       },
       child: Scaffold(

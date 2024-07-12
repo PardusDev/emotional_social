@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         if (state is AuthAuthenticated) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
         } else if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(errorSnackBar("An error occured. Please try again."));
+          ScaffoldMessenger.of(context).showSnackBar(errorSnackBar(state.message));
         }
       },
       child: Scaffold(
@@ -60,6 +60,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 32,),
                 RoundedButton(
                   onPressed: () {
+                    // Close if keyboard is open
+                    FocusScope.of(context).unfocus();
+
                     final email = _emailController.text;
                     final password = _passwordController.text;
                     context.read<AuthBloc>().add(SignInRequested(email, password));

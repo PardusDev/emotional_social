@@ -13,7 +13,6 @@ class ContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Color will change
     Icon icon = Icon(
     reverse ? Icons.keyboard_arrow_left : Icons.keyboard_arrow_right,
     color: AppColors.continueButtonTextColor,

@@ -53,7 +53,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
-                      ), //uid
+                      ),
                       const SizedBox(width: 10.0),
                       const Icon(
                         Icons.circle,

@@ -232,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                                                       .authorNameSurnameColor,
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600
-                                              ),), //uid
+                                              ),),
                                             const SizedBox(width: 10.0,),
                                             const Icon(Icons.circle, size: 8.0,
                                               color: AppColors

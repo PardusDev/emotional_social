@@ -1,6 +1,7 @@
 import 'package:emotional_social/repositories/auth_repository.dart';
 import 'package:emotional_social/repositories/post_repository.dart';
 import 'package:emotional_social/screens/home_screen.dart';
+import 'package:emotional_social/screens/loading_screen.dart';
 import 'package:emotional_social/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,16 +40,30 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
             useMaterial3: true,
           ),
-          home: BlocBuilder<AuthBloc, AuthState> (
-            builder: (context, state) {
-              if (state is AuthAuthenticated) {
-                return const HomePage();
-              } else {
-                return const LoginPage();
-              }
-            },
-          ),
+          home: AuthenticationWrapper(),
         ),
+      ),
+    );
+  }
+}
+
+class AuthenticationWrapper extends StatelessWidget {
+  const AuthenticationWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => AuthBloc(authRepository: context.read<AuthRepository>())..add(CheckAuthStatus()),
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is AuthAuthenticated) {
+            return const HomePage();
+          } else if (state is AuthLoading) {
+            return const LoadingPage();
+          } else {
+            return const LoginPage();
+          }
+        },
       ),
     );
   }

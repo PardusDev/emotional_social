@@ -90,5 +90,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(const AuthError('Google sign-in failed.'));
       }
     });
+
+    on<CheckAuthStatus>((event, emit) async {
+      emit(AuthLoading());
+      final currentUser = await _authRepository.getCurrentUser();
+      if (currentUser != null) {
+        final userModel = await _authRepository.getUserByUID(currentUser.uid);
+        if (userModel != null) {
+          emit(AuthAuthenticated(user: currentUser, userModel: userModel));
+        } else {
+          emit(AuthInitial());
+        }
+      } else {
+        emit(AuthInitial());
+      }
+    });
   }
 }

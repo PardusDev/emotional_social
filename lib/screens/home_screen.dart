@@ -4,6 +4,7 @@ import 'package:emotional_social/theme/colors.dart';
 import 'package:emotional_social/utilities/date_format.dart';
 import 'package:emotional_social/widgets/HomeScreenPostText.dart';
 import 'package:emotional_social/widgets/TextWithRoundedBackground.dart';
+import 'package:emotional_social/widgets/snackbars.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,209 +63,233 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = context.watch<AuthBloc>().state;
-
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: AppBar(
-        title: const Text('Emotional Social'),
-        backgroundColor: AppColors.homePageAppBarBgColor,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              context.read<AuthBloc>().add(SignOutRequested());
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginPage()),
-                      (Route<dynamic> route) => false);
-            },
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, authState) {
+        return Scaffold(
+            backgroundColor: AppColors.backgroundColor,
+            appBar: AppBar(
+              title: const Text('Emotional Social'),
+              backgroundColor: AppColors.homePageAppBarBgColor,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () {
+                    context.read<AuthBloc>().add(SignOutRequested());
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                        builder: (context) => const LoginPage()),
+                            (Route<dynamic> route) => false);
+                  },
+                )
+              ],
+            ),
+            body: SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: [
-                  const SizedBox(height: 6.0,),
-                  TextField(
-                    controller: _postContentController,
-                    decoration: InputDecoration(
-                      labelText: 'Share your emotions',
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.send, color: AppColors.sendButtonBg,),
-                        onPressed: () async {
-                          final content = _postContentController.text;
-                          if (content.isNotEmpty) {
-                            if (authState is AuthAuthenticated) {
-                              //DEPRECATED: final userInfo = await _authRepository.getUserByUID(user!.uid);
-                              final post = Post(
-                                  id: DateTime.now().toString(),
-                                  content: content,
-                                  authorId: user!.uid,
-                                  author: authState.userModel.surname.isEmpty ? authState.userModel.name : "${authState.userModel.name} ${authState.userModel.surname}",
-                                  emotion: _selectedEmotion,
-                                  sharedDate: DateTime.now()
-                              );
-                              context.read<PostBloc>().add(AddPost(post));
-                              _postContentController.clear();
-                            }
-                          }
-                        },
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 6.0,),
+                        TextField(
+                          controller: _postContentController,
+                          decoration: InputDecoration(
+                            labelText: 'Share your emotions',
+                            suffixIcon: IconButton(
+                              icon: const Icon(
+                                Icons.send, color: AppColors.sendButtonBg,),
+                              onPressed: () async {
+                                final content = _postContentController.text;
+                                if (content.isNotEmpty) {
+                                  if (authState is AuthAuthenticated) {
+                                    final post = Post(
+                                        id: DateTime.now().toString(),
+                                        content: content,
+                                        authorId: user!.uid,
+                                        author: authState.userModel.surname
+                                            .isEmpty
+                                            ? authState.userModel.name
+                                            : "${authState.userModel
+                                            .name} ${authState.userModel
+                                            .surname}",
+                                        emotion: _selectedEmotion,
+                                        sharedDate: DateTime.now()
+                                    );
+                                    context.read<PostBloc>().add(AddPost(post));
+                                    _postContentController.clear();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        errorSnackBar(
+                                            "You need to be logged in to post."));
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 28.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: emotions.map((emotion) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedEmotion = emotion;
+                                });
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                      color: _selectedEmotion == emotion
+                                          ? AppColors.selectedEmotionBg
+                                          : AppColors.unSelectedEmotionBg,
+                                    ),
+                                    child: Image.asset(
+                                      getEmotionAsset(emotion),
+                                      height: 40,
+                                      width: 40,
+                                    ),
+                                  ),
+                                  if (_selectedEmotion == emotion)
+                                    const Icon(
+                                      Icons.check_circle,
+                                      color: AppColors.selectedEmotionBg,
+                                      size: 20,
+                                    ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 28.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: emotions.map((emotion) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedEmotion = emotion;
-                          });
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30.0),
-                                color: _selectedEmotion == emotion
-                                    ? AppColors.selectedEmotionBg
-                                    : AppColors.unSelectedEmotionBg,
-                              ),
-                              child: Image.asset(
-                                getEmotionAsset(emotion),
-                                height: 40,
-                                width: 40,
-                              ),
-                            ),
-                            if (_selectedEmotion == emotion)
-                              const Icon(
-                                Icons.check_circle,
-                                color: AppColors.selectedEmotionBg,
-                                size: 20,
-                              ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                  const SizedBox(height: 8.0,),
+                  BlocBuilder<PostBloc, PostState>(
+                    builder: (context, state) {
+                      if (state is PostLoading) {
+                        return const Center(child: Padding(
+                          padding: EdgeInsets.all(18.0),
+                          child: LoadingDot(),
+                        ));
+                      } else if (state is PostLoaded) {
+                        if (state.posts.isEmpty) {
+                          return const Center(child: Text(
+                            'No posts yet. 😥', style: TextStyle(
+                            color: AppColors.secondaryTextColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                          ),),);
+                        }
+                        return ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          separatorBuilder: (context, index) =>
+                          const SizedBox(
+                            height: 18,
+                          ),
+                          itemCount: state.hasReachedMax
+                              ? state.posts.length
+                              : state.posts.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index >= state.posts.length) {
+                              return state.hasReachedMax
+                                  ? Container()
+                                  : const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.only(bottom: 18.0),
+                                  child: LoadingDot(),
+                                ),
+                              );
+                            } else {
+                              final post = state.posts[index];
+                              final dateFormat = formatAccordingToNow(
+                                  post.sharedDate);
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context, PageRouteBuilder(
+                                      pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                          PostDetailPage(post: post),
+                                      transitionsBuilder: rightTransition)
+                                  );
+                                },
+                                child: Material(
+                                  elevation: 4.0,
+                                  shadowColor: AppColors.shadowColor,
+                                  child: ListTile(
+                                    tileColor: AppColors.homePagePostBgColor,
+                                    title: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(post.author,
+                                              style: const TextStyle(
+                                                  color: AppColors
+                                                      .authorNameSurnameColor,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600
+                                              ),), //uid
+                                            const SizedBox(width: 10.0,),
+                                            const Icon(Icons.circle, size: 8.0,
+                                              color: AppColors
+                                                  .separatorDotColor,),
+                                            const SizedBox(width: 10.0,),
+                                            TextWithRoundedBackground(
+                                                text: dateFormat),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6.0,),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Your friend feels ${Emotion
+                                                  .getEmotionName(
+                                                  post.emotion)}',
+                                              style: const TextStyle(
+                                                color: AppColors
+                                                    .postFeelTextColor,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 5.0),
+                                            Image.asset(
+                                              getEmotionAsset(post.emotion),
+                                              height: 20,
+                                              width: 20,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    subtitle:
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: HomeScreenPostText(
+                                        text: post.content,
+                                        maxCharacters: 65,
+                                        post: post,),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      } else {
+                        return const Center(child: Text('No posts yet.'));
+                      }
+                    },
+                  )
                 ],
               ),
             ),
-            const SizedBox(height: 8.0,),
-              BlocBuilder<PostBloc, PostState>(
-                builder: (context, state) {
-                  if (state is PostLoading) {
-                    return const Center(child: Padding(
-                      padding: EdgeInsets.all(18.0),
-                      child: LoadingDot(),
-                    ));
-                  } else if (state is PostLoaded) {
-                    if (state.posts.isEmpty) {
-                      return const Center(child: Text('No posts yet. 😥', style: TextStyle(
-                        color: AppColors.secondaryTextColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),),);
-                    }
-                  return ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 18,
-                    ),
-                    itemCount: state.hasReachedMax
-                                ? state.posts.length
-                                : state.posts.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index >= state.posts.length) {
-                        return state.hasReachedMax
-                            ? Container()
-                            : const Center(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 18.0),
-                            child: LoadingDot(),
-                          ),
-                        );
-                      } else {
-                        final post = state.posts[index];
-                        final dateFormat = formatAccordingToNow(post.sharedDate);
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(context, PageRouteBuilder(
-                                pageBuilder: (context, animation,
-                                    secondaryAnimation) =>
-                                    PostDetailPage(post: post),
-                                transitionsBuilder: rightTransition)
-                            );
-                          },
-                          child: Material(
-                            elevation: 4.0,
-                            shadowColor: AppColors.shadowColor,
-                            child: ListTile(
-                              tileColor: AppColors.homePagePostBgColor,
-                              title: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(post.author, style: const TextStyle(
-                                        color: AppColors.authorNameSurnameColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600
-                                      ),), //uid
-                                      const SizedBox(width: 10.0,),
-                                      const Icon(Icons.circle, size: 8.0, color: AppColors.separatorDotColor,),
-                                      const SizedBox(width: 10.0,),
-                                      TextWithRoundedBackground(text: dateFormat),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 6.0,),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Your friend feels ${Emotion.getEmotionName(post.emotion)}',
-                                        style: const TextStyle(
-                                          color: AppColors.postFeelTextColor,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5.0),
-                                      Image.asset(
-                                        getEmotionAsset(post.emotion),
-                                        height: 20,
-                                        width: 20,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              subtitle:
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 4.0),
-                                  child: HomeScreenPostText(text: post.content,
-                                    maxCharacters: 65,
-                                    post: post,),
-                                ),
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  );
-                } else {
-                  return const Center(child: Text('No posts yet.'));
-                }
-              },
-            )
-          ],
-        ),
-      ),
+        );
+      }
     );
   }
 }
